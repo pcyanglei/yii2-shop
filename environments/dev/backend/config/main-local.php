@@ -23,13 +23,15 @@ if (!YII_ENV_TEST) {
             'crud'  => [
                 'class'     => 'yh\gii\generators\crud\Generator',
                 'templates' => [
-                    'zh' => '@common/yh-gii/generators/crud/default',
+                    'default' => '@vendor/yiisoft/yii2-gii/generators/crud/default',
+                    'yh'      => '@common/yh-gii/generators/crud/default',
                 ]
             ],
             'model' => [
                 'class'     => 'yii\gii\generators\model\Generator',
                 'templates' => [
-                    'zh' => '@common/yh-gii/generators/model/default',
+                    'default' => '@vendor/yiisoft/yii2-gii/generators/model/default',
+                    'yh'      => '@common/yh-gii/generators/model/default',
                 ]
             ],
         ]
