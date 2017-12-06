@@ -30,16 +30,6 @@ class GoodsController extends Controller
         ];
     }
 
-
-    public function actionTest()
-    {
-        $obj = \Yii::createObject([
-            'class' => 'common\components\cart\CartService',
-            'test' => 1555
-        ]);
-
-        $obj->t();
-    }
     /**
      * Lists all Goods models.
      * @return mixed

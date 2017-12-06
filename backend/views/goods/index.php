@@ -6,7 +6,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\Goods */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
+\backend\assets\GoodsAsset::register($this);
 $this->title = '商品列表';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
