@@ -14,32 +14,14 @@ use yii\base\Component;
 class GoodsOrderService extends Component
 {
     const EVENT_COST = 'costCalc';
-    /**
-     * @var MsgInterface
-     */
     protected $msgHandler;
-    /**
-     * @var GoodsInterface[]
-     */
     protected $goods = [];
-
-    /**
-     * GoodsOrderService constructor.
-     * @param array $config
-     * @param MsgInterface $msgHandler
-     */
-    public function __construct(array $config = [], MsgInterface $msgHandler)
+    public function __construct(MsgInterface $msgHandler,array $config = [])
     {
         parent::__construct($config);
         $this->msgHandler = $msgHandler;
     }
-
-    /**
-     * @param GoodsInterface $goods
-     * @param int $quantity
-     */
-    public function put($goods, $quantity = 1)
-    {
+    public function put(GoodsInterface $goods, $quantity = 1){
         $key = $goods->getKey();
         if (isset($this->goods[$key])) {
             $this->goods[$key]->setQuantity($quantity + $this->goods[$key]->getQuantity());
@@ -48,11 +30,6 @@ class GoodsOrderService extends Component
             $this->goods[$key] = $goods;
         }
     }
-
-    /**
-     * @param bool $withDiscount
-     * @return int
-     */
     public function getCost($withDiscount = true): int
     {
         $cost = 0;
@@ -66,7 +43,7 @@ class GoodsOrderService extends Component
         if ($withDiscount) {
             $cost -= $goodsOrderEvent->discountValue;
         }
-        $this->msgHandler->sendMsg("......");
+        $this->msgHandler->sendMsg("some message");
         return max(0, $cost);
     }
 

@@ -1,6 +1,5 @@
 <?php
-
-use common\components\msg\MsgInterface;
+namespace common\components\msg;
 
 /**
  * Created by PhpStorm.
@@ -13,6 +12,6 @@ class MobileMsgImp implements MsgInterface
 
     public function sendMsg(string $data)
     {
-        \Yii::info("移动---短信已发送!");
+        \Yii::warning("移动---短信已发送!");
     }
 }

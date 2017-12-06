@@ -1,2 +1,4 @@
 <?php
-\Yii::$container->set('common\components\cart\GoodsInterface', 'backend\models\Goods');
+\Yii::$container->set('common\components\msg\MsgInterface', [
+    'class' => 'common\components\msg\MobileMsgImp'
+]);

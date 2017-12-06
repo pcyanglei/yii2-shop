@@ -76,4 +76,26 @@ class Goods extends GoodsModel implements GoodsInterface
 
         return $dataProvider;
     }
+
+    private $_quantity = 0;
+    public function getPrice(): int
+    {
+        return $this->price;
+    }
+    public function getKey(): string
+    {
+        return $this->id;
+    }
+    public function setQuantity(int $quantity)
+    {
+        $this->_quantity = $quantity;
+    }
+    public function getQuantity(): int
+    {
+        return $this->_quantity;
+    }
+    public function getCost(): int
+    {
+        return $this->getPrice() * $this->getQuantity();
+    }
 }

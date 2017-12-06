@@ -2,9 +2,13 @@
 
 namespace backend\controllers;
 
+use backend\models\Goods;
+use common\components\cart\GoodsOrderService;
+use common\models\GoodsOrderSnapshot;
 use Yii;
 use common\models\GoodsOrder;
 use backend\models\GoodsOrder as GoodsOrderSearch;
+use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -60,14 +64,37 @@ class GoodsOrderController extends Controller
      * Creates a new GoodsOrder model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @throws Exception
      */
     public function actionCreate()
     {
-        $model = new GoodsOrder();
-        echo \Yii::$app->order->getCost();
+        $goods = $this->findGoodsModel();
+        /* @var  $goodsOrderService GoodsOrderService*/
+        $goodsOrderService = \Yii::$app->order;
+        foreach ($goods as $good) {
+            $goodsOrderService->put($good,1);
+        }
+        $order = new GoodsOrder();
+        $order->sn = time();
+        $order->total_price = $goodsOrderService->getCost();
+        $order->user_id = 1;
 
-
-
+        $orderSnapshot = new GoodsOrderSnapshot();
+        $transaciton = $order->getDb()->beginTransaction();
+        try{
+            if ($order->save(false) !== true) {
+                throw new Exception('save goodsOrder fail');
+            }
+            $orderSnapshot->goods_order_id = $order->id;
+            if ($orderSnapshot->save(false) !== true){
+                throw new Exception('save goodsOrderSnapshot fail');
+            }
+            $transaciton->commit();
+            return $this->redirect(['index']);
+        }catch (Exception $e) {
+            $transaciton->rollBack();
+            throw new Exception($e->getMessage());
+        }
     }
 
     /**
@@ -120,5 +147,13 @@ class GoodsOrderController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    /**
+     * 模拟数据
+     */
+    protected function findGoodsModel()
+    {
+        return Goods::findAll(['id' => [1,2,3]]);
     }
 }
