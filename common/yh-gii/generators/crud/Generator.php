@@ -1,5 +1,5 @@
 <?php
-namespace zh\gii\generators\crud;
+namespace yh\gii\generators\crud;
 
 use yii\gii\generators\crud\Generator as YiiGenerator;
 use yii\db\ActiveRecord;
