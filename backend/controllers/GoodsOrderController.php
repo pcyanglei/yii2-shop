@@ -2,18 +2,17 @@
 
 namespace backend\controllers;
 
-use common\components\cart\CartService;
 use Yii;
-use common\models\Goods;
-use backend\models\Goods as GoodsSearch;
+use common\models\GoodsOrder;
+use backend\models\GoodsOrder as GoodsOrderSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * GoodsController implements the CRUD actions for Goods model.
+ * GoodsOrderController implements the CRUD actions for GoodsOrder model.
  */
-class GoodsController extends Controller
+class GoodsOrderController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,23 +29,13 @@ class GoodsController extends Controller
         ];
     }
 
-
-    public function actionTest()
-    {
-        $obj = \Yii::createObject([
-            'class' => 'common\components\cart\CartService',
-            'test' => 1555
-        ]);
-
-        $obj->t();
-    }
     /**
-     * Lists all Goods models.
+     * Lists all GoodsOrder models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new GoodsSearch();
+        $searchModel = new GoodsOrderSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -56,7 +45,7 @@ class GoodsController extends Controller
     }
 
     /**
-     * Displays a single Goods model.
+     * Displays a single GoodsOrder model.
      * @param integer $id
      * @return mixed
      */
@@ -68,14 +57,14 @@ class GoodsController extends Controller
     }
 
     /**
-     * Creates a new Goods model.
+     * Creates a new GoodsOrder model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Goods();
-        if ($model->load(Yii::$app->request->post())) {
+        $model = new GoodsOrder();
+        if ($model->load(Yii::$app->request->post())) { 
             if($model->save()) {
                 return $this->redirect(['index']);
             }
@@ -87,7 +76,7 @@ class GoodsController extends Controller
     }
 
     /**
-     * Updates an existing Goods model.
+     * Updates an existing GoodsOrder model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -96,7 +85,7 @@ class GoodsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) { 
             if($model->save()) {
                 return $this->redirect(['index']);
             }
@@ -104,13 +93,13 @@ class GoodsController extends Controller
             return $this->render('update', [
                 'model' => $model,
             ]);
-        }
+        }	
 	}
 
 
 
     /**
-     * Deletes an existing Goods model.
+     * Deletes an existing GoodsOrder model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -123,15 +112,15 @@ class GoodsController extends Controller
     }
 
     /**
-     * Finds the Goods model based on its primary key value.
+     * Finds the GoodsOrder model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Goods the loaded model
+     * @return GoodsOrder the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Goods::findOne($id)) !== null) {
+        if (($model = GoodsOrder::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
