@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\components\cart\GoodsInterface;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -10,7 +11,7 @@ use common\models\Goods as GoodsModel;
 /**
  * Goods represents the model behind the search form about `common\models\Goods`.
  */
-class Goods extends GoodsModel
+class Goods extends GoodsModel implements GoodsInterface
 {
     /**
      * @inheritdoc

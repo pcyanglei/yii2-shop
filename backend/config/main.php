@@ -16,6 +16,9 @@ return [
     ],
     'modules' => [],
     'components' => [
+        'order' => [
+            'class' =>\common\components\cart\GoodsOrderService::className()
+        ],
         'request' => [
             'csrfParam' => '_csrf-backend',
         ],

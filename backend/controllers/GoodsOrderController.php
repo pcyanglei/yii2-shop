@@ -64,15 +64,10 @@ class GoodsOrderController extends Controller
     public function actionCreate()
     {
         $model = new GoodsOrder();
-        if ($model->load(Yii::$app->request->post())) { 
-            if($model->save()) {
-                return $this->redirect(['index']);
-            }
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
+        echo \Yii::$app->order->getCost();
+
+
+
     }
 
     /**
