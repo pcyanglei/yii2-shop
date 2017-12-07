@@ -15,6 +15,7 @@ use Yii;
  */
 class User extends \yii\db\ActiveRecord
 {
+    const ACTIVE_STATU  = 1;
     /**
      * @inheritdoc
      */

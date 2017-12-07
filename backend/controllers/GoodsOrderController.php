@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\Goods;
 use common\components\cart\GoodsOrderService;
 use common\models\GoodsOrderSnapshot;
+use common\models\User;
 use Yii;
 use common\models\GoodsOrder;
 use backend\models\GoodsOrder as GoodsOrderSearch;
@@ -12,6 +13,7 @@ use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * GoodsOrderController implements the CRUD actions for GoodsOrder model.
@@ -118,6 +120,30 @@ class GoodsOrderController extends Controller
         }	
 	}
 
+    /**
+     * @return GoodsOrder[]
+     * @throws NotFoundHttpException
+     */
+	public function actionAllOrder():array
+    {
+        \Yii::$app->getResponse()->format = Response::FORMAT_JSON;
+        $user = $this->getUserModel(1);
+        return $user->goodsOrders;//$user->getGoodsOrders()->all()
+    }
+
+    /**
+     * @param $id
+     * @return User
+     * @throws NotFoundHttpException
+     */
+    protected function getUserModel($id):User
+    {
+        if (($model = User::findOne($id)) !== null && $model->id == User::ACTIVE_STATU) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
 
 
     /**

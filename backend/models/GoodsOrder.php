@@ -42,23 +42,19 @@ class GoodsOrder extends GoodsOrderModel
     public function search($params)
     {
         $query = GoodsOrderModel::find();
-
         // add conditions that should always apply here
 
+        $query->with(['user']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'pageSize' => 15,
             ],
             'sort' => [
-                'defaultOrder' => [
-                    'id'=> SORT_DESC
-                ]
+                'defaultOrder' => ['id'=> SORT_DESC]
             ],
         ]);
-
         $this->load($params);
-
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
@@ -71,9 +67,7 @@ class GoodsOrder extends GoodsOrderModel
             'total_price' => $this->total_price,
             'user_id' => $this->user_id,
         ]);
-
         $query->andFilterWhere(['like', 'sn', $this->sn]);
-
         return $dataProvider;
     }
 }

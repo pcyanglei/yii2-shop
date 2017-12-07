@@ -8,7 +8,6 @@ namespace common\helpers;
  */
 class MoneyHelper
 {
-
     /**
      * @param int $value
      * @return float

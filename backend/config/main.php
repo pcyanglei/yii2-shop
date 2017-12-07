@@ -18,9 +18,9 @@ return [
     'components' => [
         'order' => [
             'class' =>\common\components\cart\GoodsOrderService::className(),
-//            'on costCalc' => function($event) {
-//                $event->discountValue = 10000;
-//            }
+            'on costCalc' => function($event) {
+                $event->discountValue = 10000;
+            }
         ],
         'request' => [
             'csrfParam' => '_csrf-backend',

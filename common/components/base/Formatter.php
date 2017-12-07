@@ -11,7 +11,6 @@ use \yii\i18n\Formatter as BaseFormatter;
 class Formatter extends BaseFormatter
 {
     /**
-     * Formats the value as an HTML-encoded plain text.
      * @param string $value the value to be formatted.
      * @return string the formatted result.
      */

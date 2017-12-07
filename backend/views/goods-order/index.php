@@ -24,12 +24,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'tableOptions' => ['class' => 'table table-striped'],
         //'filterModel' => $searchModel,
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'sn',
-            'total_price',
+            'total_price:money',
             'user_id',
+            'user.username',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
