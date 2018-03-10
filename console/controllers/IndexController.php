@@ -1,82 +1,88 @@
 <?php
 namespace console\controllers;
+
+use common\helpers\ClientHelper;
+use common\models\AccountLog;
+use common\models\ChargeLog;
+use common\models\Goods;
 use yii\console\Controller;
-use common\components\task\Scheduler;
-use common\components\task\SystemCall;
-use common\components\task\Task;
+use yii\db\Exception;
 
 class IndexController extends Controller
 {
-    
-    public function actionTest()
+    protected $server;
+
+    const WORK_NUM = 8;
+    const TASK_NUM = 8;
+
+    public static function getIds()
     {
-        function gen() {
-            echo 1 . "\n";
-            $ret = (yield 'yield1');
-            echo 2 . "\n";
-            var_dump($ret);
-            $ret = (yield 'yield2');
-            echo 3 . "\n";
-            var_dump($ret);
-        }
-        
-        $gen = gen();//执行这里的时候 上面的代码就被隐式的调用了 rewind()
-        var_dump($gen->current());    // 获取当前的yield 并执行
-        var_dump($gen->send('ret1')); // 获取下一个
-        var_dump($gen->send('ret2')); //
+        return AccountLog::find()
+            ->select(['account_log_account_id'])
+            ->asArray()
+//            ->limit(20)
+            ->groupBy('account_log_account_id')
+            ->column();
     }
-    
-    
-    public function actionIndex2()
-    {
-        function getTaskId() {
-            return new SystemCall(function(Task $task, Scheduler $scheduler) {
-                //这里就是把当前系统调动的task 设置下次掉用他需要发送的value字段
-                $task->setSendValue($task->getTaskId());
-                //吧系统调用的task放入队列
-                $scheduler->schedule($task);
-            });
-        }
-        
-        function task($max) {
-            $tid = (yield getTaskId()); // <-- here's the syscall!
-            for ($i = 1; $i <= $max; ++$i) {
-                echo "This is task $tid iteration $i.\n";
-                yield;
-            }
-        }
-        
-        $scheduler = new Scheduler;
-        
-        $scheduler->newTask(task(10));
-//         $scheduler->newTask(task(5));
-        
-        $scheduler->run();
-        
-    }
-    
+
     public function actionIndex()
     {
-        function task1() {
-            for ($i = 1; $i <= 10; ++$i) {
-                echo "This is task 1 iteration $i.\n";
-                yield $i;
-            }
+        ini_set('memory_limit', '1024M');
+        set_time_limit(0);
+        $this->server = new \swoole_server('127.0.0.1', '9501');
+        $this->server->set([
+            'worker_num'      => self::WORK_NUM,
+            'task_worker_num' => self::TASK_NUM,
+        ]);
+        $this->server->on("Receive", [$this, 'onReceive']);
+        $this->server->on('task', [$this, 'onTask']);
+        $this->server->on("Finish", [$this, 'onFinish']);
+        $this->server->start();
+    }
+
+    public function onFinish($serv, $task_id, $data)
+    {
+        echo $data;
+    }
+
+    /**
+     * 添加任务
+     *
+     * @param $ser
+     * @param $fd
+     * @param $from_id
+     * @param $data
+     *
+     * @throws \Exception
+     * @internal param $uid
+     */
+    public function onReceive($ser, $fd, $from_id, $action)
+    {
+        //投递任务
+        foreach (self::getIds() as $id) {
+            $this->server->task($id);
         }
-         
-        function task2() {
-            for ($i = 1; $i <= 5; ++$i) {
-                echo "This is task 2 iteration $i.\n";
-                yield;
-            }
+        $ser->send($fd, '投递任务成功');
+    }
+
+    public function onTask($serv, $task_id, $from_id, $uid)
+    {
+        //告诉worker线程 处理完毕
+
+        //查询每一个用户在当月全部的充值记录
+        $charges = AccountLog::find()
+            ->where(['account_log_account_id' => $uid])
+            ->andWhere(['account_log_desc' => '充值金豆'])
+            ->asArray()
+            ->all();
+        foreach ($charges as $charge) {
+            $m                  = new ChargeLog();
+            $m->created_at      = $charge['account_log_create_at'];
+            $m->amount          = $charge['account_log_amount'];
+            $m->user_account_id = $charge['account_log_account_id'];
+            $m->save(false);
         }
-        
-         
-        $scheduler = new Scheduler();
-         
-        $scheduler->newTask(task1());
-        $scheduler->newTask(task2());
-         
-        $scheduler->run();
+        AccountLog::updateAll(['flag' => 1],['account_log_account_id' => $uid]);
+        return $uid . '   finish' . PHP_EOL;
     }
 }
