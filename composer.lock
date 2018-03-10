@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b9b311b0cfe8e0b55ba628889a4ae97f",
+    "content-hash": "d1fd3b937ae1edb1fa58db3a167526b6",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -641,6 +641,49 @@
                 "yii2"
             ],
             "time": "2017-08-04T10:48:17+00:00"
+        },
+        {
+            "name": "zh/yii2-qiniu-images",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pcyanglei/yii2-qiniu-images.git",
+                "reference": "edf202df78272b007cd090446be65434153ed67b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/pcyanglei/yii2-qiniu-images/edf202df78272b007cd090446be65434153ed67b.zip",
+                "reference": "edf202df78272b007cd090446be65434153ed67b",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/vue": "~2.4",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "zh\\qiniu\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "yanghu",
+                    "email": "127802495@qq.com"
+                }
+            ],
+            "description": "一款直传七牛的yii2图片widget",
+            "keywords": [
+                "images",
+                "yii2",
+                "七牛",
+                "多图"
+            ],
+            "time": "2017-11-28T06:23:04+00:00"
         }
     ],
     "packages-dev": [
@@ -3273,7 +3316,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "zh/yii2-qiniu-images": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
